@@ -1,3 +1,6 @@
+# Course: DevOps
+# Project: e-commerce application on Centos System
+
 # Introduction
 
 This is a sample e-commerce application built for learning purposes.
@@ -6,12 +9,15 @@ Here's how to deploy it on CentOS systems:
 
 ## Deploy Pre-Requisites
 
+P.S: your VM is connected and can communicate with internet. you TS if its is not working. You can find test in first part of project.logs that i verified internet connection first on my VM.
+
 1. Install FirewallD
 
 ```
 sudo yum install -y firewalld
 sudo service firewalld start
 sudo systemctl enable firewalld
+P.S , i check the status of firewall by sudo service firewalld status. and check eth and ports as well by $ # firewall-cmd --list-all
 ```
 
 ## Deploy and Configure Database
@@ -30,6 +36,7 @@ sudo systemctl enable mariadb
 ```
 sudo firewall-cmd --permanent --zone=public --add-port=3306/tcp
 sudo firewall-cmd --reload
+P.S: and check again eth & ports by firewall-cmd --list-all
 ```
 
 3. Configure Database
@@ -40,6 +47,8 @@ MariaDB > CREATE DATABASE ecomdb;
 MariaDB > CREATE USER 'ecomuser'@'localhost' IDENTIFIED BY 'ecompassword';
 MariaDB > GRANT ALL PRIVILEGES ON *.* TO 'ecomuser'@'localhost';
 MariaDB > FLUSH PRIVILEGES;
+
+P.S: Here i need to perform some extra TS, you can refer to my project.logs
 ```
 
 > ON a multi-node setup remember to provide the IP address of the web server here: `'ecomuser'@'web-server-ip'`
@@ -64,7 +73,7 @@ Run sql script
 
 mysql < db-load-script.sql
 ```
-
+P.S : in teh end i check the contents of MariaDB 'ecomdb' by MariaDB [ecomdb]> select * from products;
 
 ## Deploy and Configure Web
 
@@ -95,11 +104,11 @@ sudo systemctl enable httpd
 
 ```
 sudo yum install -y git
-git clone https://github.com/kodekloudhub/learning-app-ecommerce.git /var/www/html/
+git clone (https://github.com/fazalUllah-Khan/learning-app-ecommerce /var/www/html/ ) // Since I fork to my repo. thus I am cloning from my github. 
 ```
 
 5. Update index.php
-
+P.S this step was done already and I duplicate according yto my situation. 
 Update [index.php](https://github.com/kodekloudhub/learning-app-ecommerce/blob/13b6e9ddc867eff30368c7e4f013164a85e2dccb/index.php#L107) file to connect to the right database server. In this case `localhost` since the database is on the same server.
 
 ```
